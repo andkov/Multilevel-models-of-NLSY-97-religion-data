@@ -1,17 +1,6 @@
-## Looking at NLSY-97 data in multilevel framework
-
-## Data structure
-![Data structure of the study](figures_images/Figure_1_NLSY97_Religion_24102012.png)
+## Repository to organize code examples
 
 
-## Null Model
-![Null Model](figures_images/0_null_longitudinal.png)
-
-## Null Model (alternative notation)
-![Null Model](figures_images/0_null_longitudinal_alt.png)
-
-## Response Variable "attend"
-![Null Model](figures_images/attend.png)
 
 ### Installation is important
 Instructions for installing the pieces required for generating and running our reports. 

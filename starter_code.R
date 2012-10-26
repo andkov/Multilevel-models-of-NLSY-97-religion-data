@@ -1,4 +1,7 @@
 rm(list=ls(all=TRUE)) #Clear all the variables from previous runs
+install.package(colorspace) # Installs the package
+update.packages("ask=F") # udpates the package
+require(colorspace) # loads the package
 require(plyr)
 require(reshape2)
 

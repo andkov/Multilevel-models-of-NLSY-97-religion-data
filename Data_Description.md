@@ -1,8 +1,15 @@
-Describing the structure of the Data in NLSY97_Religion_10242012
+Describing the structure in the project
 ========================================================
+databank = NLSY97_Religion_10242012 (source,keyword,date of retrieval)
+## Pointing to the working directory
+
+    pathDirectory <- "C:/Users/Serious/Documents/GitHub"
+    pathBank <- file.path(pathDirectory, "NLSY-97_Religiosity/databank")
+    pathInData <- file.path(pathDirectory, "NLSY-97_Religiosity/databank/NLSY97_Religion_10242012.csv")
+
 ## Mock data to illustrate variables, scales and possible values
 
-![Data Structure](Figures_Images/Figure_1_NLSY97_Religion_24102012.png)
+![Data Structure](figure/Figure_1_NLSY97_Religion_24102012_b.png)
 
 Documenting the import of data from NLSY Web-Investigator
 ========================================================

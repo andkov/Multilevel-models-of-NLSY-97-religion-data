@@ -4,7 +4,8 @@ require(plyr)
 require(reshape2)
 require(lme4) #Load the library necessary for multilevel models
 require(colorspace) #Load the library necessary for creating tightly-controlled palettes.
-
+pathGitHub<-file.path("C:/Users/Serious/Documents/GitHub")
+pathData <- file.path(pathGitHub,"NLSY-97_Religiosity/databank/temp_NLSY97_Religion_24102012") #Location of the data file.
 
 relattm<- read.csv("C:/Users/Serious/Documents/GitHub/NLSY-97_Religiosity/databank/temp_NLSY97_Religion_24102012/backup_withmissing/relatt.csv", stringsAsFactors=FALSE)
 relatt<- read.csv("C:/Users/Serious/Documents/GitHub/NLSY-97_Religiosity/databank/temp_NLSY97_Religion_24102012/backup_withoutmissing/relatt.csv", stringsAsFactors=FALSE)
@@ -14,39 +15,130 @@ relattm <- relattm[order(relattm$id, relattm$byear),]
 relatt <- relatt[order(relatt$id, relatt$byear),]
 #byearc$relattm<-byear$relattm-1980)
 
-str(relatt)
+byear_center<-c(1980)
+relattm$byearc<-(relattm$byear-byear_center)
+relatt$byearc<-(relatt$byear-byear_center)
+
 relattm$AgeMon <- as.integer(relattm$AgeMon)     #Convert to a number.
-relattm$byear <- as.factor(relattm$byear)       #Create a factor variable (for lmer), but retain the numerical variable if you need it later (for graphing).
+relattm$byear  <- as.factor(relattm$byear)       #Create a factor variable (for lmer), but retain the numerical variable if you need it later (for graphing).
+relattm$byearc <- as.factor(relattm$byear)
+
 relatt$AgeMon <- as.integer(relatt$AgeMon)     
-relatt$byear <- as.factor(relatt$byear)
-str(relattm)
+relatt$byear  <- as.factor(relatt$byear)
+relatt$byearc <- as.factor(relatt$byear)
+
+str(relattm) 
+str(relatt)
+
+# 
+# m00<- lm(attend~ 1,data=relatt )
+# summary(m00)
+# 
+# m0 <- lmer(attend ~ 1 + (1 | id), data=relatt) # Null, random intercept model, no predictors
+# summary(m0)
+# coef(m0)
+# 
+# m1 <- lmer(attend ~ AgeMon + (1 | id), data=relatt)# Random intercept, fixed slope
+# summary(m1)
+# coef(m1)
+# 
+# m2 <- lmer(attend ~ AgeMon + (1 + AgeMon | id), data=relatt)# Random intercept, random slopes
+# summary(m2)
+# coef(m2)
+
+m3 <- lmer(attend ~ AgeMon + (1 + AgeMon | id) + (1 | byearc), data=relatt)
+summary(m3)
+
+# ranef(m2) #Look at the random effects (one intercept for each subject)
+# fixef(m2) #Look at the fixted effects 
 
 
-m00<- lm(attend~ 1,data=relatt )
-summary(m00)
+###
+# Draw the graph
+###
 
-m0 <- lmer(attend ~ 1 + (1 | id), data=relatt) # Null, random intercept model, no predictors
-summary(m0)
-coef(m0)
+#For color information see http://cran.r-project.org/web/packages/colorspace/vignettes/hcl-colors.pdf
+# and http://statmath.wu.ac.at/~zeileis/papers/Zeileis+Hornik+Murrell-2009.pdf
 
-m1 <- lmer(attend ~ AgeMon + (1 | id), data=relatt)# Random intercept, fixed slope
-summary(m1)
-coef(m1)
+#pchGroup <- sort(unique(relatt$byear)) #Define the shapes used for each group. In this case, it's just a 1 and 2.
+pchGroup <- c("1980","1981")
+colorSubject <- rainbow_hcl(n=length(unique(relatt$id))) #Define colors for each subject
+colorGroup <- rainbow_hcl(n=length(unique(relatt$byear))) #Define colors for each group
+colorGroupAlpha <- adjustcolor(colorGroup, alpha.f=.5) #Define translucent colors for each group
+colorGroupDark <- rainbow_hcl(n=length(unique(relatt$byear)), c=50, l=60) #Define slightly darker colors for each group (usd for their mean slope).
+xRange <- range(relatt$AgeMon, na.rm=TRUE) #To be used for the x-axis limits (and remove and missing/NA values).
+yRange <- range(relatt$attend, na.rm=TRUE) #To be used for the x-axis limits
 
-m2 <- lmer(attend ~ AgeMon + (1 + AgeMon | id), data=relatt)# Random intercept, random slopes
+#Define three shades of gray to be used by the graph's non-data elements
+controlDark <- gray(.4)
+controlMedium <- gray(.6)
+controlLight <- gray(.8)
+
+#Start plotting
+#oldPar <- par(mar=c(5, 4, 4, 2), mgp=c(3,1,0))
+oldPar <- par(mar=c(2.1, 2, 3, .5), tcl=0, mgp=c(1,0,0))
+#plot(NA, xlim=xRange, ylim=yRange, main="MLM Practice", xlab="Time", ylab="Score")
+plot(NA, xlim=xRange, ylim=yRange, main="MLM Practice", ann=F, xaxt="n", yaxt="n", bty="n") #plot and empty square
+axis(side=1, col.axis=controlMedium, cex.axis=.8) #Draw the x-axis with slightly smaller numbers (80% of the original size)
+axis(side=2, col.axis=controlMedium, cex.axis=.8) #Draw the y-axis with slightly smaller numbers
+mtext("Age in months", side=1, line=1, col=controlDark) #Label the x-axis
+mtext("Religious involvement", side=2, line=1, col=controlDark) #Label the y-axis
+box(col=controlLight) #Draw a light framing box.
+#points(x=ds$TimePoint, y=ds$Score)
+#points(x=ds$TimePoint, y=ds$Score, col=colorSubject[ds$SubjectID])
+#boxRadius <- .1
+
+boxRadius <- .05 #Define half of the box's width
+boxOffset <- c(-.05,.05 ) #Shift Group1 to the left, shift Group2 to the right
+
+for( byear in unique(relatt$byear) ) { #Iterate through each group in the dataset.
+  for( AgeMon in sort(unique(relatt$AgeMon)) ) { #Iterate through each timepoint in the dataset.
+    dsSlice <- subset(relatt, byear==byear & AgeMon==AgeMon) #Select data only from a specific group's time point.
+    if( nrow(dsSlice) > 0 ) { #If these points exist, the continue to draw the box
+      uh <- quantile(dsSlice$Score, .75) #Calculate the upper hinge.
+      #median <- - quantile(dsSlice$Score, .5)
+      lh <- quantile(dsSlice$Score, .25) #Calculate the lower hinge.
+      
+      xLeft <- AgeMon - boxRadius + boxOffset[byear] #Calculate the box's left boundary location.
+      xRight <- AgeMon + boxRadius + boxOffset[byear]#Calculate the box's right boundary location.
+      #rect(ybottom=lh, ytop=uh, xleft=xLeft, xright=xRight)
+      #rect(ybottom=lh, ytop=uh, xleft=xLeft, xright=xRight, col=colorGroup[byear]) 
+      rect(ybottom=lh, ytop=uh, xleft=xLeft, xright=xRight, col=colorGroup[byear], border=NA) #Draw the box with an invisible border.
+      #rect(ybottom=lh, ytop=uh, xleft=xLeft, xright=xRight, border=colorGroup[groupID], col=NA)
+      
+      #TODO: add a bar for median
+    }
+  }
+}
+rm(dsSlice)
+
+#This loop iterates over each subject and 
+for( SubjectID in unique(relatt$id) ) { 
+  dsSlice <- subset(relatt, SubjectID==id) #Select only that subject's data
+  xs <- dsSlice$AgeMon #Should we jitter?
+  ys <- dsSlice$attend
+  #lines(x=xs, y=ys)
+  #lines(x=xs, y=ys, col=colorGroup[dsSlice$byear]  )
+  lines(x=xs, y=ys, col=colorGroupAlpha[dsSlice$byear]) #Draw their line, with their group's color
+}
+rm(dsSlice) #Remove the variable from memory
+
+
 summary(m2)
-coef(m2)
-
-
-
-ranef(m2) #Look at the random effects (one intercept for each subject)
-fixef(m2) #Look at the fixted effects ( beta_0j)
-
 co <- fixef(m2) #Extract the coefficients for the fixed effects.
 print(co) #Print the fixed effects to the console
 names(co) #Inspect the names of the four coefficients.
 #Plot the summary for Group1 (which is just the intercept plus the slope*time)
-curve(co["(Intercept)"] + co["byear"]*x , add=T, col=colorGroupDark[1], lwd=4)
+colorGroupDark<-c("red")
+curve(co["(Intercept)"] + co["AgeMon"]*x , add=T, col=colorGroupDark[1], lwd=4)
+# curve - shortcut for the folling code
+# x<-150:400
+# a<-co["(Intercept)"]
+# b<-co["AgeMon"]
+# y<-a+b*x
+# lines(x,y,col="red")
+
+
 
 
 #Run and compare competing models.  I liked m7 for this.

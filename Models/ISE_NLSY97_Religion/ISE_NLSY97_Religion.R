@@ -29,25 +29,39 @@ relatt$byearc <- as.factor(relatt$byear)
 
 str(relattm) 
 str(relatt)
+relatt$AgeMon2<-relatt$AgeMon^2
+relatt$AgeMonC<-relatt$AgeMon-192
+relatt$AgeMonC2<-relatt$AgeMonC
+relatt$Age<-relatt$AgeMon/12
+relatt$AgeC<-relatt$AgeMonC/12
+relatt$AgeC2<-relatt$AgeC^2
+relatt$AgeC3<-relatt$AgeC^3
 
-# 
-# m00<- lm(attend~ 1,data=relatt )
+
+# The names of the models correspond to the buttons in ISE_NLSY97_Religion.pptx
+# Explicitely requesting the model estimates:
+# summary(m0) # Variances and st.devs of random effect + fixed effect
+# fixef(m0) # Fixed effects
+# ranef(m0) # Random effects
+# coef(m0)  # Fixed and Random effects
+
+
+# (m00<- lm(attend~ 1,data=relatt))
 # summary(m00)
-# 
-# m0 <- lmer(attend ~ 1 + (1 | id), data=relatt) # Null, random intercept model, no predictors
-# summary(m0)
-# coef(m0)
-# 
-# m1 <- lmer(attend ~ AgeMon + (1 | id), data=relatt)# Random intercept, fixed slope
-# summary(m1)
-# coef(m1)
-# 
-# m2 <- lmer(attend ~ AgeMon + (1 + AgeMon | id), data=relatt)# Random intercept, random slopes
-# summary(m2)
-# coef(m2)
+ 
+(m0 <- lmer(attend ~ 1 + (1 | id),relatt,REML=0)) # Null, random intercept model with no predictors
+ 
+(m1 <- lmer(attend ~ AgeMon + (1 | id),relatt,REML=0))# Random intercept, fixed slope
+ 
+(m2 <- lmer(attend ~ AgeMon + (1 + AgeMon | id), relatt,REML=0))# Random intercept, random slopes
 
-m3 <- lmer(attend ~ AgeMon + (1 + AgeMon | id) + (1 | byearc), data=relatt)
-summary(m3)
+(m3 <- lmer(attend ~ AgeMon + AgeMon2 + (1 + AgeMon | id), relatt,REML=0)) # fixed level-2 predictor
+
+
+m0
+m1
+m2
+m3
 
 # ranef(m2) #Look at the random effects (one intercept for each subject)
 # fixef(m2) #Look at the fixted effects 
@@ -162,10 +176,3 @@ curve(co["(Intercept)"] + co["AgeMon"]*x , add=T, col=colorGroupDark[1], lwd=4)
 
 
 
-
-
-
-
-m4 <- lmer(attend ~ AgeMon + (1 + AgeMon | id) + (1 + AgeMon | byear), data=relatt)
-summary(m4)
-curve(co["(Intercept)"] + co["AgeMon"]*x , add=T, col=colorGroupDark[1], lwd=4)

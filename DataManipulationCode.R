@@ -3,9 +3,9 @@ require(plyr)
 require(reshape2)
 
 pathDirectory <- "C:/Users/Serious/Documents/GitHub"
-pathBank <- file.path(pathDirectory, "NLSY-97_Religiosity/databank")
+outCurrent<- file.path(pathDirectory, "NLSY-97_Religiosity/databank/current")
 pathInData <- file.path(pathDirectory, "NLSY-97_Religiosity/databank/NLSY97_Religion_10242012.csv")
-pathOutData <- file.path(pathBank, "SummaryBirthYearByTime.csv") #The name of the file to write to.
+pathOutData <- file.path(outCurrent,"wide", "relatt_wide_nomiss.csv") #The name of the file to write to.
 
 dsWide <- read.csv(pathInData, stringsAsFactors=FALSE)
 
@@ -21,11 +21,14 @@ dsWide$byear <- as.integer(dsWide$byear)
 dsWide <- dsWide[dsWide$id != "V", ]
 dsWide$id <- as.integer(dsWide$id)
 
+
 #Drop the birth month variable
-dsWide <- dsWide[, colnames(dsWide) != "bmonth"]
+# dsWide <- dsWide[, colnames(dsWide) != "bmonth"]
 
 #Inspect the resulting dataset
 summary(dsWide)
+write.csv(dsWide, pathOutData, row.names=FALSE)
+
 
 #Transform the wide dataset into a long dataset
 dsLong <- melt(dsWide, id.vars=c("id", "byear"))
@@ -38,45 +41,48 @@ dsLong <- plyr::rename(dsLong, replace=c(variable="time", value="attendence"))
 summary(dsLong)
 head(dsLong, 20)
 
-#Create a function to summarize each byear*time cell
-SummarizeBYearTime <- function( df ) {#df stands for 'data.frame'
-  #Create a new data.frame with three columns
-  dsResult <- data.frame(
-    TotalGoers=sum(df$attendence %in% c(6,7,8)),
-    TotalIrregulars= sum(df$attendence %in% c(3,4,5)),
-    TotalAbsentees=sum(df$attendence %in% c(1,2))
-  )
-  
-  #Calculate the proportions
-  cellCount <- dsResult$TotalGoers + dsResult$TotalIrregulars + dsResult$TotalAbsentees
-  #Equivalent way: cellCount <- apply(dsResult[, c('TotalGoers', 'TotalIrregulars', 'TotalAbsentees')], 1, sum)
-  dsResult$ProportionGoers <- dsResult$TotalGoers / cellCount
-  dsResult$ProportionIrregulars <- dsResult$TotalIrregulars / cellCount
-  dsResult$ProportionAbsentees <- dsResult$TotalAbsentees / cellCount
-  
-  #Check that the totals sum to 1.0.  Throw an error if not.
-  #dsResult$ProportionTotal <- dsResult$ProportionGoers + dsResult$ProportionIrregulars + dsResult$ProportionAbsentees
-  
-  proportionTotal <- dsResult$ProportionGoers + dsResult$ProportionIrregulars + dsResult$ProportionAbsentees
-  if( abs(proportionTotal - 1) > 1e-7 ) stop("The proportions summing to 1 for each byear*time cell.")
-  
-  #Return the new data.frame (presumably to the ddply call).
-  return( dsResult)
-}
 
 
-# Create a data.frame that has a row for each unique summarize each byear*time combination.
-dsSummarized <- plyr::ddply(dsLong, .variables=c("byear", "time"), .fun=SummarizeBYearTime)
+# 
+# #Create a function to summarize each byear*time cell
+# SummarizeBYearTime <- function( df ) {#df stands for 'data.frame'
+#   #Create a new data.frame with three columns
+#   dsResult <- data.frame(
+#     TotalGoers=sum(df$attendence %in% c(6,7,8)),
+#     TotalIrregulars= sum(df$attendence %in% c(3,4,5)),
+#     TotalAbsentees=sum(df$attendence %in% c(1,2))
+#   )
+#   
+#   #Calculate the proportions
+#   cellCount <- dsResult$TotalGoers + dsResult$TotalIrregulars + dsResult$TotalAbsentees
+#   #Equivalent way: cellCount <- apply(dsResult[, c('TotalGoers', 'TotalIrregulars', 'TotalAbsentees')], 1, sum)
+#   dsResult$ProportionGoers <- dsResult$TotalGoers / cellCount
+#   dsResult$ProportionIrregulars <- dsResult$TotalIrregulars / cellCount
+#   dsResult$ProportionAbsentees <- dsResult$TotalAbsentees / cellCount
+#   
+#   #Check that the totals sum to 1.0.  Throw an error if not.
+#   #dsResult$ProportionTotal <- dsResult$ProportionGoers + dsResult$ProportionIrregulars + dsResult$ProportionAbsentees
+#   
+#   proportionTotal <- dsResult$ProportionGoers + dsResult$ProportionIrregulars + dsResult$ProportionAbsentees
+#   if( abs(proportionTotal - 1) > 1e-7 ) stop("The proportions summing to 1 for each byear*time cell.")
+#   
+#   #Return the new data.frame (presumably to the ddply call).
+#   return( dsResult)
+# }
+# 
+# 
+# # Create a data.frame that has a row for each unique summarize each byear*time combination.
+# dsSummarized <- plyr::ddply(dsLong, .variables=c("byear", "time"), .fun=SummarizeBYearTime)
+# 
+# #Inspect the variables & top part of the results.
+# summary(dsSummarized)
+# head(dsSummarized, 10)
+# # Create a data.frame that has a row for each unique summarize each byear*time combination.
+# dsSummarized <- plyr::ddply(dsLong, .variables=c("byear", "time"), .fun=SummarizeBYearTime)
+# 
+# #Inspect the variables & top part of the results.
+# summary(dsSummarized)
+# head(dsSummarized, 10)
 
-#Inspect the variables & top part of the results.
-summary(dsSummarized)
-head(dsSummarized, 10)
-# Create a data.frame that has a row for each unique summarize each byear*time combination.
-dsSummarized <- plyr::ddply(dsLong, .variables=c("byear", "time"), .fun=SummarizeBYearTime)
-
-#Inspect the variables & top part of the results.
-summary(dsSummarized)
-head(dsSummarized, 10)
-
-write.csv(dsSummarized, pathOutData, row.names=FALSE)
+# write.csv(dsSummarized, pathOutData, row.names=FALSE)
   

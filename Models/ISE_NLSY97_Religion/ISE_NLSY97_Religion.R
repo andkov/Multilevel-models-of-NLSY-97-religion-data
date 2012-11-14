@@ -7,11 +7,10 @@ require(colorspace) #Load the library necessary for creating tightly-controlled 
 pathGitHub<-file.path("C:/Users/Serious/Documents/GitHub")
 pathData <- file.path(pathGitHub,"NLSY-97_Religiosity/databank/temp_NLSY97_Religion_24102012") #Location of the data file.
 
-relattm<- read.csv("C:/Users/Serious/Documents/GitHub/NLSY-97_Religiosity/databank/temp_NLSY97_Religion_24102012/backup_withmissing/relatt.csv", stringsAsFactors=FALSE)
-relatt<- read.csv("C:/Users/Serious/Documents/GitHub/NLSY-97_Religiosity/databank/temp_NLSY97_Religion_24102012/backup_withoutmissing/relatt.csv", stringsAsFactors=FALSE)
+relatt<- read.csv("C:/Users/Serious/Documents/GitHub/NLSY-97_Religiosity/databank/current/notmissing/relatt.csv", stringsAsFactors=FALSE)
+wrelatt<- read.csv("C:/Users/Serious/Documents/GitHub/NLSY-97_Religiosity/databank/current/wide/relatt_wide_nomiss.csv", stringsAsFactors=FALSE)
 
-
-relattm <- relattm[order(relattm$id, relattm$byear),]
+# relattm <- relattm[order(relattm$id, relattm$byear),]
 relatt <- relatt[order(relatt$id, relatt$byear),]
 #byearc$relattm<-byear$relattm-1980)
 

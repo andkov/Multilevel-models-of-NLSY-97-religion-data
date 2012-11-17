@@ -14,27 +14,17 @@ wrelatt<- read.csv("C:/Users/Serious/Documents/GitHub/NLSY-97_Religiosity/databa
 relatt <- relatt[order(relatt$id, relatt$byear),]
 #byearc$relattm<-byear$relattm-1980)
 
-byear_center<-c(1980)
-relattm$byearc<-(relattm$byear-byear_center)
-relatt$byearc<-(relatt$byear-byear_center)
-
-relattm$AgeMon <- as.integer(relattm$AgeMon)     #Convert to a number.
-relattm$byear  <- as.factor(relattm$byear)       #Create a factor variable (for lmer), but retain the numerical variable if you need it later (for graphing).
-relattm$byearc <- as.factor(relattm$byear)
-
-relatt$AgeMon <- as.integer(relatt$AgeMon)     
-relatt$byear  <- as.factor(relatt$byear)
-relatt$byearc <- as.factor(relatt$byear)
+relatt$byearc <- as.factor(relatt$byear-1980)       # Centered at 1980
+relatt$AgeMonc <- as.integer(relatt$AgeMon-(16*12)) # Centered at 16  = months since turning 16 
+relatt$AgeYearc<-((relatt$AgeMon/12)-16)            # Centered at 16 = years since turning 16
+relatt$AgeMonc2<-(relatt$AgeMonc^2)                 # Quadratid term for Months
+relatt$AgeYearc2<-(relatt$AgeYearc^2)               # Quadratid term for Years
+relatt$AgeMonc3<-(relatt$AgeMonc^3)
+relatt$AgeYearc3<-(relatt$AgeYearc^3)
 
 str(relattm) 
 str(relatt)
-relatt$AgeMon2<-relatt$AgeMon^2
-relatt$AgeMonC<-relatt$AgeMon-192
-relatt$AgeMonC2<-relatt$AgeMonC
-relatt$Age<-relatt$AgeMon/12
-relatt$AgeC<-relatt$AgeMonC/12
-relatt$AgeC2<-relatt$AgeC^2
-relatt$AgeC3<-relatt$AgeC^3
+
 
 
 # The names of the models correspond to the buttons in ISE_NLSY97_Religion.pptx

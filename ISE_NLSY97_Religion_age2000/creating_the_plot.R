@@ -1,4 +1,3 @@
-# rm(list=ls(all=TRUE))  #Clears variables
 #install.packages(c("lme4", "colorspace", "NlsyLinks")) #Install only once for each version of R.
 require(lme4) #Load the library necessary for multilevel models
 require(colorspace) #Load the library necessary for creating tightly-controlled palettes.
@@ -8,39 +7,23 @@ ds <- read.csv(file=pathInput, stringsAsFactors=F, colClasses=c("integer", "inte
 ds$GroupF <- factor(ds$GroupID) #Create a 'factor' for Group (which is necessary for the multilevel model)
 ds$SubjectF <- factor(ds$SubjectID)#Create a 'factor' for Subject (which is necessary for the multilevel model)
 
-#Run and compare competing models.  I liked m7 for this.
-# m0 <- lm(Score ~ 1 + TimePoint, data=ds)
-# summary(m0)
-# m1 <- lm(Score ~ 1 + GroupF + TimePoint, data=ds)
-# summary(m1)
-# m2 <- lm(Score ~ 1 + GroupF + TimePoint + GroupF*TimePoint, data=ds)
-# summary(m2)
-# m3 <- lmer(Score ~ 1 + GroupF + TimePoint + (1 | SubjectF), data=ds)
-# summary(m3)
-# m4 <- lmer(Score ~ 1 + GroupF + TimePoint + (1 + TimePoint | SubjectF), data=ds)
-# summary(m4)
-# m5 <- lmer(Score ~ 1 + TimePoint + (1 | SubjectF) + (1 + TimePoint | GroupF), data=ds)
-# summary(m5)
-# m6 <- lmer(Score ~ 1 + TimePoint +  (1 + TimePoint | GroupF), data=ds)
-# summary(m6)
+describe(ds)
+# #Run and compare competing models.
 
-#For m7, the L2/fixed coeffients are for the (a) intercept, (b) group's offset, (c) time's slope and (d) their interaction.
-# The L1/random coefficients (ie, those specific to the subject) are intercept and slope.
 m7 <- lmer(Score ~ 1 + GroupF + TimePoint + GroupF*TimePoint + (1 + TimePoint | SubjectF), data=ds)
-summary(m7) 
+summary(m7)
 
+### Draw the graph
 ###
-# Draw the graph
-###
-
 #For color information see http://cran.r-project.org/web/packages/colorspace/vignettes/hcl-colors.pdf
 # and http://statmath.wu.ac.at/~zeileis/papers/Zeileis+Hornik+Murrell-2009.pdf
-
+str(ds)
 pchGroup <- sort(unique(ds$GroupID)) #Define the shapes used for each group. In this case, it's just a 1 and 2.
 colorSubject <- rainbow_hcl(n=length(unique(ds$SubjectID))) #Define colors for each subject
 colorGroup <- rainbow_hcl(n=length(unique(ds$GroupID))) #Define colors for each group
 colorGroupAlpha <- adjustcolor(colorGroup, alpha.f=.5) #Define translucent colors for each group
 colorGroupDark <- rainbow_hcl(n=length(unique(ds$GroupID)), c=50, l=60) #Define slightly darker colors for each group (usd for their mean slope).
+
 xRange <- range(ds$TimePoint, na.rm=TRUE) #To be used for the x-axis limits (and remove and missing/NA values).
 yRange <- range(ds$Score, na.rm=TRUE) #To be used for the x-axis limits
 
@@ -48,6 +31,7 @@ yRange <- range(ds$Score, na.rm=TRUE) #To be used for the x-axis limits
 controlDark <- gray(.4)
 controlMedium <- gray(.6)
 controlLight <- gray(.8)
+
 
 #Start plotting
 #oldPar <- par(mar=c(5, 4, 4, 2), mgp=c(3,1,0))
@@ -60,7 +44,7 @@ axis(side=2, col.axis=controlMedium, cex.axis=.8) #Draw the y-axis with slightly
 mtext("Time", side=1, line=0, col=controlDark) #Label the x-axis
 mtext("Score", side=2, line=1, col=controlDark) #Label the y-axis
 box(col=controlLight) #Draw a light framing box.
-#points(x=ds$TimePoint, y=ds$Score)
+# points(x=ds$TimePoint, y=ds$Score)
 #points(x=ds$TimePoint, y=ds$Score, col=colorSubject[ds$SubjectID])
 
 #boxRadius <- .1
@@ -85,7 +69,7 @@ for( groupID in unique(ds$GroupID) ) { #Iterate through each group in the datase
     }
   }
 }
-rm(dsSlice)
+rm(dsSlice) # Removes the variable from memory
 
 #This loop iterates over each subject and 
 for( subjectID in unique(ds$SubjectID) ) { 
@@ -98,6 +82,8 @@ for( subjectID in unique(ds$SubjectID) ) {
 }
 rm(dsSlice) #Remove the variable from memory
 
+ranef(m7)
+fixef(m7)
 coef(m7) #Visually inspect all the model's coefficients
 co <- fixef(m7) #Extract the coefficients for the fixed effects.
 print(co) #Print the fixed effects to the console
@@ -107,7 +93,7 @@ names(co) #Inspect the names of the four coefficients.
 curve(co["(Intercept)"]  + co["TimePoint"]*x , add=T, col=colorGroupDark[1], lwd=4)
 #Plot the summary for Group2 (which now includes the Group 2 offsets for intercept & slope)
 curve(co["(Intercept)"] + co["GroupF2"] + co["TimePoint"]*x + co["GroupF2:TimePoint"]*x, add=T, col=colorGroupDark[2], lwd=4)
-  
+
 #Annotate the clinical threshold of 13.
 threshold <- 13
 abline(h=threshold, col="blue")

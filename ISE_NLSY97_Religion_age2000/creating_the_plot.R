@@ -82,6 +82,7 @@ for( subjectID in unique(ds$SubjectID) ) {
 }
 rm(dsSlice) #Remove the variable from memory
 
+summary(m7)
 ranef(m7)
 fixef(m7)
 coef(m7) #Visually inspect all the model's coefficients

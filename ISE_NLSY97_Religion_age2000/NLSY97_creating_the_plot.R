@@ -7,18 +7,27 @@ ds <- dssmall
 # ds$GroupF <- factor(ds$GroupID) #Create a 'factor' for Group (which is necessary for the multilevel model)
 # ds$SubjectF <- factor(ds$SubjectID)#Create a 'factor' for Subject (which is necessary for the multilevel model)
 
+
 summary(m6s)
+fixef(m6s) # defines the line for reference - given all predictors are 0
+(coef<-coef(m6s)) # individual trajectories of subjects
+co <- fixef(m6s) #Extract the coefficients for the fixed effects.
+print(co) #Print the fixed effects to the console
+names(co) #Inspect the names of the four coefficients.
+
+
 
 ### Draw the graph
 ###
 #For color information see http://cran.r-project.org/web/packages/colorspace/vignettes/hcl-colors.pdf
 # and http://statmath.wu.ac.at/~zeileis/papers/Zeileis+Hornik+Murrell-2009.pdf
 str(ds)
-pchGroup <- sort(unique(ds$byearc)) #Define the shapes used for each group. In this case, it's just a 1 and 2.
+ds$byearci<-ds$byearc+1 # for 
+pchGroup <- 1 # sort(unique(ds$byearc)) #Define the shapes used for each group. In this case, it's just a 1 and 2.
 colorSubject <- rainbow_hcl(n=length(unique(ds$id))) #Define colors for each subject
-colorGroup <- rainbow_hcl(n=length(unique(ds$byearc))) #Define colors for each group
+colorGroup <- rainbow_hcl(n=length(unique(ds$byearci))) #Define colors for each group
 colorGroupAlpha <- adjustcolor(colorGroup, alpha.f=.5) #Define translucent colors for each group
-colorGroupDark <- rainbow_hcl(n=length(unique(ds$byearc)), c=50, l=60) #Define slightly darker colors for each group (usd for their mean slope).
+colorGroupDark <- rainbow_hcl(n=length(unique(ds$byearci)), c=50, l=60) #Define slightly darker colors for each group (usd for their mean slope).
 
 xRange <- range(ds$time, na.rm=TRUE) #To be used for the x-axis limits (and remove and missing/NA values).
 yRange <- range(ds$attend, na.rm=TRUE) #To be used for the x-axis limits
@@ -43,55 +52,56 @@ box(col=controlLight) #Draw a light framing box.
 # points(x=ds$TimePoint, y=ds$Score)
 #points(x=ds$TimePoint, y=ds$Score, col=colorSubject[ds$SubjectID])
 
-# #boxRadius <- .1
-# boxRadius <- .02 #Define half of the box's width - This case has five (5) groups
-# boxOffset <- c(-boxRadius*2,-boxRadius,boxRadius, boxRadius*2) #Shift Group1 to the left, shift Group2 to the right
-# for( groupID in unique(ds$byearc) ) { #Iterate through each group in the dataset.
-#   for( timePoint in sort(unique(ds$timec)) ) { #Iterate through each timepoint in the dataset.
-#     dsSlice <- subset(ds, byearc==groupID & timec==timePoint) #Select data only from a specific group's time point.
-#     if( nrow(dsSlice) > 0 ) { #If these points exist, the continue to draw the box
-#       uh <- quantile(dsSlice$attend, .75) #Calculate the upper hinge.
-#       #median <- - quantile(dsSlice$Score, .5)
-#       lh <- quantile(dsSlice$attend, .25) #Calculate the lower hinge.
-#       
-#       xLeft <- timePoint - boxRadius + boxOffset[groupID] #Calculate the box's left boundary location.
-#       xRight <- timePoint + boxRadius + boxOffset[groupID]#Calculate the box's right boundary location.
-#       #rect(ybottom=lh, ytop=uh, xleft=xLeft, xright=xRight)
-#       #rect(ybottom=lh, ytop=uh, xleft=xLeft, xright=xRight, col=colorGroup[groupID]) 
-#       rect(ybottom=lh, ytop=uh, xleft=xLeft, xright=xRight, col=colorGroup[groupID], border=NA) #Draw the box with an invisible border.
-#       #rect(ybottom=lh, ytop=uh, xleft=xLeft, xright=xRight, border=colorGroup[groupID], col=NA)
-#       
-#       #TODO: add a bar for median
-#     }
-#   }
-# }
-# rm(dsSlice) # Removes the variable from memory
+#boxRadius <- .1
+boxRadius <- .02 #Define half of the box's width - This case has five (5) groups
+boxOffset <- c(-boxRadius*2,-boxRadius,boxRadius, boxRadius*2) #Shift Group1 to the left, shift Group2 to the right
+for( groupID in unique(ds$byearci) ) { #Iterate through each group in the dataset.
+  for( timePoint in sort(unique(ds$timec)) ) { #Iterate through each timepoint in the dataset.
+    dsSlice <- subset(ds, byearci==groupID & timec==timePoint) #Select data only from a specific group's time point.
+    if( nrow(dsSlice) > 0 ) { #If these points exist, the continue to draw the box
+      uh <- quantile(dsSlice$attend, .75) #Calculate the upper hinge.
+      #median <- - quantile(dsSlice$Score, .5)
+      lh <- quantile(dsSlice$attend, .25) #Calculate the lower hinge.
+      
+      xLeft <- timePoint - boxRadius + boxOffset[groupID] #Calculate the box's left boundary location.
+      xRight <- timePoint + boxRadius + boxOffset[groupID]#Calculate the box's right boundary location.
+      #rect(ybottom=lh, ytop=uh, xleft=xLeft, xright=xRight)
+      #rect(ybottom=lh, ytop=uh, xleft=xLeft, xright=xRight, col=colorGroup[groupID]) 
+      rect(ybottom=lh, ytop=uh, xleft=xLeft, xright=xRight, col=colorGroup[groupID], border=NA) #Draw the box with an invisible border.
+      #rect(ybottom=lh, ytop=uh, xleft=xLeft, xright=xRight, border=colorGroup[groupID], col=NA)
+      
+      #TODO: add a bar for median
+    }
+  }
+}
+rm(dsSlice) # Removes the variable from memory
 
 #This loop iterates over each subject and 
-for( id in unique(ds$id) ) { 
-  dsSlice <- subset(ds, id==id) #Select only that subject's data
-  xs <- dsSlice$timec #Should we jitter?
+for( i in unique(ds$id) ) { 
+  dsSlice <- subset(ds, id==i) #Select only that subject's data
+  xs <- dsSlice$time #Should we jitter?
   ys <- dsSlice$attend
   #lines(x=xs, y=ys)
-  #lines(x=xs, y=ys, col=colorGroup[dsSlice$GroupID]  )
-  lines(x=xs, y=ys, col=colorGroupAlpha[dsSlice$byearc]) #Draw their line, with their group's color
+  lines(x=xs, y=ys, col=colorGroup[dsSlice$byearci]  )
+  #lines(x=xs, y=ys, col=colorGroupAlpha[dsSlice$byearci]) #Draw their line, with their group's color
 }
 rm(dsSlice) #Remove the variable from memory
 
-ranef(m7)
-fixef(m7)
-coef(m7) #Visually inspect all the model's coefficients
-co <- fixef(m7) #Extract the coefficients for the fixed effects.
+summary(m6s)
+fixef(m6s) # defines the line for reference - given all predictors are 0
+coef(m6s) # individual trajectories of subjects
+co <- fixef(m6s) #Extract the coefficients for the fixed effects.
 print(co) #Print the fixed effects to the console
 names(co) #Inspect the names of the four coefficients.
+print (co)
 
 #Plot the summary for Group1 (which is just the intercept plus the slope*time)
-curve(co["(Intercept)"]  + co["TimePoint"]*x , add=T, col=colorGroupDark[1], lwd=4)
+curve(co["(Intercept)"]  + co["timec"]*x , add=T, col=colorGroupDark[1], lwd=4)
 #Plot the summary for Group2 (which now includes the Group 2 offsets for intercept & slope)
-curve(co["(Intercept)"] + co["GroupF2"] + co["TimePoint"]*x + co["GroupF2:TimePoint"]*x, add=T, col=colorGroupDark[2], lwd=4)
+curve(co["(Intercept)"] + co["byearc"]*x + co["timec"]*x + co["byearc:timec"]*x, add=T, col=colorGroupDark[2], lwd=4)
 
 #Annotate the clinical threshold of 13.
-threshold <- 13
+threshold <- 3.44
 abline(h=threshold, col="blue")
 text(x=1, y=threshold, labels="Clinical\nThreshold", pos=4, col="blue")
 

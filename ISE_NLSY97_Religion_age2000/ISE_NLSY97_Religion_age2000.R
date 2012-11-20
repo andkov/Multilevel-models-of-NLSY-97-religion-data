@@ -41,7 +41,7 @@ str(dsattendlong)
 
 dssmall<-subset(dsattendlong,dsattendlong$id<=200)
 str(dssmall)
-(m6s <- lmer(attend ~ 1 + byearc + timec+ byearc*timec + (1 + timec | id), dssmall,REML=0)) 
+(m6s <- lmer(attend ~ 1 + byearc + timec + byearc*timec + (1 + timec | id), dssmall,REML=0)) 
 
 
 

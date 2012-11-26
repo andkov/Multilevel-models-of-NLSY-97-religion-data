@@ -5,10 +5,10 @@
 databank = NLSY97_Religion_10242012 (source,keyword,date of retrieval)
 ## Wide structure of NLSY97 data
 
-![Data Structure](variables/Figure_1_Wide.png)
+(variables/Figure_1_Wide.png)
 
 ## Long structure of NLSY97 data
-![Data Structure](variables/Figure_2_Long.png)
+(variables/Figure_2_Long.png)
 
 Documenting the import of data from NLSY Web-Investigator
 ========================================================

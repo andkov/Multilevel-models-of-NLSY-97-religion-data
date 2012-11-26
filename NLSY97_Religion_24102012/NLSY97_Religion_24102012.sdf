@@ -1,0 +1,75 @@
+
+
+Reference
+Number     Year  Variable Description                                                Question Name            
+----------------------------------------------------------------------------------------------------------------
+R00001.00  1997  PUBID, YOUTH CASE IDENTIFICATION CODE                               PUBID                    
+R03239.00  1997  # DAYS PER WEEK TYPICALLY FAMILY DOES SOMETHING RELIGIOUS           YSAQ-010                 
+R05363.00  1997  KEY!SEX, RS GENDER (SYMBOL)                                         KEY!SEX                  
+R05364.01  1997  KEY!BDATE, RS BIRTHDATE MONTH/YEAR (SYMBOL)                         KEY!BDATE_M              
+R05364.02  1997  KEY!BDATE, RS BIRTHDATE MONTH/YEAR (SYMBOL)                         KEY!BDATE_Y              
+R05522.00  1997  WHAT RELIGION WAS PR RAISED IN?                                     P2-013                   
+R05523.00  1997  WHAT IS PRS CURRENT RELIGIOUS PREFERENCE?                           P2-014                   
+R05557.00  1997  WHAT RELIGION WAS PRS SPOUSE/PARTNER RAISED IN?                     P2-049                   
+R05558.00  1997  WHAT IS PRS SPOUSE/PARTNER CURRENT RELIGIOUS PREFERENCE?            P2-050                   
+R11939.00  1997  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE(MONTHS)_INT_DATE  
+R11941.00  1997  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+R12358.00  1997  SAMPLE TYPE.  CROSS-SECTIONAL OR OVERSAMPLE                         CV_SAMPLE_TYPE           
+R14826.00  1997  KEY!RACE_ETHNICITY, COMBINED RACE AND ETHNICITY (SYMBOL)            KEY!RACE_ETHNICITY       
+R21652.00  1998  # DAYS PER WEEK TYPICALLY FAMILY DOES SOMETHING RELIGIOUS           YSAQ-010                 
+R25534.00  1998  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE(MONTHS)_INT_DATE  
+R25535.00  1998  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+R34831.00  1999  # DAYS PER WEEK TYPICALLY FAMILY DOES SOMETHING RELIGIOUS           YSAQ-010                 
+R38762.00  1999  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE(MONTHS)_INT_DATE  
+R38763.00  1999  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+R48813.00  2000  # DAYS PER WEEK TYPICALLY FAMILY DOES SOMETHING RELIGIOUS           YSAQ-010                 
+R48934.00  2000  HOW OFTEN R ATTENDED WORSHIP SERVICE IN PAST 12 MONTHS              YSAQ-282A                
+R54536.00  2000  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE(MONTHS)_INT_DATE  
+R54537.00  2000  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+R65201.00  2001  HOW OFTEN R ATTENDED WORSHIP SERVICE IN PAST 12 MONTHS              YSAQ-282A                
+R72159.00  2001  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE(MONTHS)_INT_DATE  
+R72160.00  2001  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+S09193.00  2002  HOW OFTEN R ATTENDED WORSHIP SERVICE IN PAST 12 MONTHS              YSAQ-282A                
+S09194.00  2002  R DOES NOT NEED RELIGION FOR GOOD VALUES                            YSAQ-282A2               
+S09195.00  2002  R BELIEVES RELIGIOUS TEACHINGS ARE TO BE OBEYED EXACTLY AS WRITTEN  YSAQ-282A3               
+S09196.00  2002  R ASKS GOD HELP MAKE DECISIONS                                      YSAQ-282A4               
+S09197.00  2002  GOD NOTHING TO DO HAPPENS TO R                                      YSAQ-282A5               
+S09198.00  2002  R PRAYS MORE THAN ONCE A DAY                                        YSAQ-282A6               
+S15313.00  2002  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE(MONTHS)_INT_DATE  
+S15314.00  2002  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+S20009.00  2003  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE(MONTHS)_INT_DATE  
+S20010.00  2003  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+S29878.00  2003  HOW OFTEN R ATTENDED WORSHIP SERVICE IN PAST 12 MONTHS              YSAQ-282A                
+S38010.00  2004  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE_MONTHS_INT_DATE   
+S38011.00  2004  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+S46817.00  2004  HOW OFTEN R ATTENDED WORSHIP SERVICE IN PAST 12 MONTHS              YSAQ-282A                
+S54009.00  2005  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE_MONTHS_INT_DATE   
+S54010.00  2005  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+S55328.00  2005  WHAT IS R'S CURRENT RELIGIOUS PREFERENCE?                           YHHI-55709               
+S63167.00  2005  HOW OFTEN R ATTENDED WORSHIP SERVICE IN PAST 12 MONTHS              YSAQ-282A                
+S63168.00  2005  R DOES NOT NEED RELIGION FOR GOOD VALUES                            YSAQ-282A2               
+S63169.00  2005  R BELIEVES RELIGIOUS TEACHINGS ARE TO BE OBEYED EXACTLY AS WRITTEN  YSAQ-282A3               
+S63170.00  2005  R ASKS GOD HELP MAKE DECISIONS                                      YSAQ-282A4               
+S63171.00  2005  GOD NOTHING TO DO HAPPENS TO R                                      YSAQ-282A5               
+S63172.00  2005  R PRAYS MORE THAN ONCE A DAY                                        YSAQ-282A6               
+S75011.00  2006  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE_MONTHS_INT_DATE   
+S75012.00  2006  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+S83315.00  2006  HOW OFTEN R ATTENDED WORSHIP SERVICE IN PAST 12 MONTHS              YSAQ-282A                
+T00084.00  2007  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE_MONTHS_INT_DATE   
+T00085.00  2007  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+T07394.00  2007  HOW OFTEN R ATTENDED WORSHIP SERVICE IN PAST 12 MONTHS              YSAQ-282A                
+T20110.00  2008  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE_MONTHS_INT_DATE   
+T20111.00  2008  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+T21114.00  2008  WHAT IS R'S CURRENT RELIGIOUS PREFERENCE?                           YHHI-55709               
+T27817.00  2008  HOW OFTEN R ATTENDED WORSHIP SERVICE IN PAST 12 MONTHS              YSAQ-282A                
+T27819.00  2008  R DOES NOT NEED RELIGION FOR GOOD VALUES                            YSAQ-282A2               
+T27820.00  2008  R BELIEVES RELIGIOUS TEACHINGS ARE TO BE OBEYED EXACTLY AS WRITTEN  YSAQ-282A3               
+T27821.00  2008  R ASKS GOD HELP MAKE DECISIONS                                      YSAQ-282A4               
+T27822.00  2008  GOD NOTHING TO DO HAPPENS TO R                                      YSAQ-282A5               
+T27823.00  2008  R PRAYS MORE THAN ONCE A DAY                                        YSAQ-282A6               
+T36014.00  2009  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE_MONTHS_INT_DATE   
+T36015.00  2009  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+T44950.00  2009  HOW OFTEN R ATTENDED WORSHIP SERVICE IN PAST 12 MONTHS              YSAQ-282A                
+T52013.00  2010  RS AGE IN MONTHS AS OF INTERVIEW DATE                               CV_AGE_MONTHS_INT_DATE   
+T52014.00  2010  RS AGE AT INTERVIEW DATE                                            CV_AGE_INT_DATE          
+T61434.00  2010  HOW OFTEN R ATTENDED WORSHIP SERVICE IN PAST 12 MONTHS              YSAQ-282A                

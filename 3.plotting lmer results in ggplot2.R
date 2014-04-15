@@ -8,8 +8,8 @@ pathOutData <- file.path(pathProject,"Images/predicted.trajectories") # where to
 rm(dsp)
 
 
-modnum<-"m10.png"   # model name and also the file number for the export, goes to title
-model<-m10          # assing the model to portray in the graph
+modnum<-"m9.png"   # model name and also the file number for the export, goes to title
+model<-m9          # assing the model to portray in the graph
 
 # summary(model)
 # fixef(model)
@@ -40,11 +40,11 @@ str(dsp)
 data = ds, REML=0))
 dsp$YPar<-(
   (coefs["(Intercept)"])         +(coefs["agec"]*dsp$agec)
-  +(coefs["timec"]*dsp$timec)    +(coefs["agec:timec"]*dsp$agec*dsp$timec)
-  +(coefs["timec2"]*dsp$timec2)  +(coefs["agec:timec2"]*dsp$agec*dsp$timec2)
-  +(coefs["timec3"]*dsp$timec3)  +(coefs["agec:timec3"]*dsp$agec*dsp$timec3)
+  +(coefs["timec"]*dsp$timec)    +(coefs["timec:agec"]*dsp$agec*dsp$timec)
+  +(coefs["timec2"]*dsp$timec2)  +(coefs["timec2:agec"]*dsp$agec*dsp$timec2)
+  +(coefs["timec3"]*dsp$timec3)  
 )
-str(dsp$YPar)  # visually inspect YPar - should be numeric values, not NA
+str(dsp$YPar) # visually inspect YPar - should be numeric values, not NA
 
 bgColour<-gray(.95)   # background color
 indLineSz<-.08        # individual line size

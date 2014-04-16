@@ -36,4 +36,7 @@ ds$agec<-ds$age2000c                                                        #ren
             + agec:timec +agec:timec2 
             + (1 + timec + timec2 + timec3 | id),
             data = ds, REML=0))
+print(m9)
+
+
 

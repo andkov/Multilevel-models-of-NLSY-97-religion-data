@@ -1,3 +1,11 @@
+install.packages('ggplot2')
+install.packages('plyr')
+install.packages('reshape2')
+install.packages('lme4')
+install.packages('colorspace')
+install.packages('Hmisc')
+install.packages('lattice')
+
 rm(list=ls(all=TRUE)) #Clear all the variables from previous runs
 require(ggplot2)
 require(plyr)
@@ -6,6 +14,8 @@ require(lme4) #Load the library necessary for multilevel models
 require(colorspace) #Load the library necessary for creating tightly-controlled palettes.
 require(Hmisc)
 require(lattice)
+
+
 
              
 pathDataDir<-file.path (getwd())                                            #GitHub repository locaton
@@ -26,17 +36,15 @@ ds$agec<-ds$age2000c                                                        #ren
 
 # ds<-subset(ds,(ds$byear==1980 |ds$byear==1982 |ds$byear== 1984),) # keeps size manageble, select chosen cohorts
 
-# ds<-subset(ds,(ds$id<=200),) # keeps size manageble
+ds<-subset(ds,(ds$id<=200),) # keeps size manageble
 
 
 # Incert a model from "the list of models.R" file here:
 
-(m9 <-lmer (attend ~ 
-  1  + timec + timec2 + timec3 + agec 
-            + agec:timec +agec:timec2 
-            + (1 + timec + timec2 + timec3 | id),
+(m5 <-lmer (attend ~ 
+              1  + timec + timec2 + timec3            
+            + (1 + timec + timec2 | id),
             data = ds, REML=0))
-print(m9)
 
 
 

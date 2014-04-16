@@ -8,19 +8,20 @@ pathOutData <- file.path(pathProject,"Images/predicted.trajectories") # where to
 rm(dsp)
 
 
-modnum<-"m9.png"   # model name and also the file number for the export, goes to title
-model<-m9          # assing the model to portray in the graph
+modnum<-"m0.png"   # model name and also the file number for the export, goes to title
+model<-m0          # assing the model to portray in the graph
 
 # summary(model)
 # fixef(model)
 # ranef(model)
 # co<-coef(model)
 # print(co)
+# names(model)
 
 
 dsPredict <- data.frame(
   model@flist,  #The grouping factors for the random effects
-  timec=model@X[, 3], #The values of the time points(which varies, depending how the model equation is specified). 
+  timec=model@X[, 1], #The values of the time points(which varies, depending how the model equation is specified). 
                       #model            m0,m1,m2,m3,m4,m5,m6,m7,m8,m9,10,m11,m12,
                       #model@X value     1  2  2  2  2  2  2  2  2  3  2   2   2
   YHat=model@eta #Predicted response, given the fixed and random effects.
@@ -36,15 +37,13 @@ str(dsp)
 (coefs <- fixef(model)) #Extract the coefficients for the fixed effects.
 #create conditional prediction lines for each of the birth year cohorts.
 # This is where the bottom part goes from "the list of models.R"
-+ (1 + timec + timec2 + timec3 | id),
-data = ds, REML=0))
+
 dsp$YPar<-(
-  (coefs["(Intercept)"])         +(coefs["agec"]*dsp$agec)
-  +(coefs["timec"]*dsp$timec)    +(coefs["timec:agec"]*dsp$agec*dsp$timec)
-  +(coefs["timec2"]*dsp$timec2)  +(coefs["timec2:agec"]*dsp$agec*dsp$timec2)
-  +(coefs["timec3"]*dsp$timec3)  
+  (coefs["(Intercept)"])         
+  +(coefs["timec"]*dsp$timec)    
+  +(coefs["timec2"]*dsp$timec2)  
 )
-str(dsp$YPar) # visually inspect YPar - should be numeric values, not NA
+str(dsp$YPar)# visually inspect YPar - should be numeric values, not NA
 
 bgColour<-gray(.95)   # background color
 indLineSz<-.08        # individual line size

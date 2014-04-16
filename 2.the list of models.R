@@ -140,7 +140,7 @@ str(dsp$YPar)
   1  + timec
             + (1 | id),
             data = ds, REML=0))
-data = ds, REML=0))
+
 dsp$YPar<-(
   (coefs["(Intercept)"])         
 )

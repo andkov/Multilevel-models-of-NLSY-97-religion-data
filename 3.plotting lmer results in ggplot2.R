@@ -8,8 +8,8 @@ pathOutData <- file.path(pathProject,"Images/predicted.trajectories") # where to
 rm(dsp)
 
 
-modnum<-"m9.png"   # model name and also the file number for the export, goes to title
-model<-m9          # assing the model to portray in the graph
+modnum<-"m3.png"   # model name and also the file number for the export, goes to title
+model<-m3          # assing the model to portray in the graph
 
 # summary(model)
 # fixef(model)
@@ -20,7 +20,7 @@ model<-m9          # assing the model to portray in the graph
 
 dsPredict <- data.frame(
   model@flist,  #The grouping factors for the random effects
-  timec=model@X[, 3], #The values of the time points(which varies, depending how the model equation is specified). 
+  timec=model@X[, 2], #The values of the time points(which varies, depending how the model equation is specified). 
                       #model            m0,m1,m2,m3,m4,m5,m6,m7,m8,m9,10,m11,m12,
                       #model@X value     1  2  2  2  2  2  2  2  2  3  2   2   2
   YHat=model@eta #Predicted response, given the fixed and random effects.

@@ -29,11 +29,12 @@ ds$agec<-ds$age2000c                                                        #ren
 ds<-subset(ds,(ds$id<=200),) # keeps size manageble
 
 
+ds$idF <- factor(ds$id)
 # Incert a model from "the list of models.R" file here:
 
 (m3 <-lmer (attend ~ 
               1  + timec + timec2            
-            + (1 + timec | id),
+            + (1 + timec | idF),
             data = ds, REML=0))
  
 

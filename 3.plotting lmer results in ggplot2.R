@@ -11,6 +11,11 @@ rm(dsp)
 modnum<-"m3.png"   # model name and also the file number for the export, goes to title
 model<-m3          # assing the model to portray in the graph
 
+predict(m3) #Gives you yHat; as far as we can tell, it works the same as fitted(model).
+model@pp$X #Gives you the predictor values
+model@flist #Give you the ID values.  Be careful if you're using more than one level.  It may not generalize the way you expect.
+attr(model@frame,which="intercept", exact=F)
+
 # summary(model)
 # fixef(model)
 # ranef(model)

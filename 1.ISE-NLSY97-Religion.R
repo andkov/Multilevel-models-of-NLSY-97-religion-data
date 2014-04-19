@@ -26,16 +26,22 @@ ds$agec<-ds$age2000c                                                        #ren
 
 # ds<-subset(ds,(ds$byear==1980 |ds$byear==1982 |ds$byear== 1984),) # keeps size manageble, select chosen cohorts
 
-ds<-subset(ds,(ds$id<=200),) # keeps size manageble
+# ds<-subset(ds,(ds$id<=200),) # keeps size manageble
 
 
-ds$idF <- factor(ds$id)
+ds$idF <- factor(ds$id)  # this is common pitfall of lme4
 # Incert a model from "the list of models.R" file here:
 
-(m3 <-lmer (attend ~ 
-              1  + timec + timec2            
-            + (1 + timec | idF),
+(m9 <-lmer (attend ~ 
+              1  + timec + timec2 + timec3 + agec 
+            + agec:timec +agec:timec2 
+            + (1 + timec + timec2 + timec3 | id),
             data = ds, REML=0))
- 
 
+(m10 <-lmer (attend ~ 
+               1  + agec + timec + timec2 + timec3
+             + agec:timec +agec:timec2 + agec:timec3
+             + (1 + timec + timec2 + timec3 | id),
+             data = ds, REML=0))
+ 
 

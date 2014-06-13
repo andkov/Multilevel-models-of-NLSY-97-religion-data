@@ -27,24 +27,28 @@ BIC <- BIC(model)
 # co<-coef(model)
 # print(co)
 
+# str(m9@call)
+# str(m9@theta)
+# str(m9@beta)
 
-# dsPredict <- data.frame(
-#   model@flist,  #The grouping factors for the random effects
-#   timec=model@X[, 2], #The values of the time points(which varies, depending how the model equation is specified). 
-#                       #model            m0,m1,m2,m3,m4,m5,m6,m7,m8,m9,10,m11,m12,
-#                       #model@X value     1  2  2  2  2  2  2  2  2  3  2   2   2
-#   YHat=model@eta #Predicted response, given the fixed and random effectss .
-# )
 
-#dsPredict above would error. Try this instead.
-dsPredict<-data.frame(id=model@frame$id,
-                      timec=model@frame$timec,
-                      YHat=fitted(model))
-#dsPredict$timec <-c(0:10)  # add this for m0 to plot no slopes
-str(dsPredict$timec) # to check what variable was taken by model@X
-dsp <- plyr::join(x=ds, y=dsPredict, by=c("id", "timec")) #Probably overkill
+dsPredict <- data.frame(
+  model@flist,  #The grouping factors for the random effects
+  timec=model@X[, 3], #The values of the time points(which varies, depending how the model equation is specified). 
+                      #model            m0,m1,m2,m3,m4,m5,m6,m7,m8,m9,10,m11,m12,
+                      #model@X value     1  2  2  2  2  2  2  2  2  3  2   2   2
+  YHat=model@eta #Predicted response, given the fixed and random effectss .
+)
 
-dsp$byearf<-as.factor(ds$byear)
+# #dsPredict above would error. Try this instead.
+# dsPredict<-data.frame(id=model@frame$id,
+#                       timec=model@frame$timec,
+#                       YHat=fitted(model))
+# #dsPredict$timec <-c(0:10)  # add this for m0 to plot no slopes
+# str(dsPredict$timec) # to check what variable was taken by model@X
+# dsp <- plyr::join(x=ds, y=dsPredict, by=c("id", "timec")) #Probably overkill
+# 
+# dsp$byearf<-as.factor(ds$byear)
 
 str(dsp)
 
@@ -52,9 +56,10 @@ str(dsp)
 #create conditional prediction lines for each of the birth year cohorts.
 # This is where the bottom part goes from "the list of models.R"
 dsp$YPar<-(
-  (coefs["(Intercept)"])         
-  +(coefs["timec"]*dsp$timec)    
-  +(coefs["timec2"]*dsp$timec2)  
+  (coefs["(Intercept)"])         +(coefs["agec"]*dsp$agec)
+  +(coefs["timec"]*dsp$timec)    +(coefs["timec:agec"]*dsp$agec*dsp$timec)
+  +(coefs["timec2"]*dsp$timec2)  +(coefs["timec2:agec"]*dsp$agec*dsp$timec2)
+  +(coefs["timec3"]*dsp$timec3)  
 )
 str(dsp$YPar)# visually inspect YPar - should be numeric values, not NA
 

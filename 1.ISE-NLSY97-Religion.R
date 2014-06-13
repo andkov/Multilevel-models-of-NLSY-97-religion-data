@@ -27,6 +27,7 @@ ds$agec<-ds$age2000c                                                        #ren
 # ds<-subset(ds,(ds$byear==1980 |ds$byear==1982 |ds$byear== 1984),) # keeps size manageble, select chosen cohorts
 
 ds<-subset(ds,(ds$id<=200),) # keeps size manageble
+# length(unique(ds$id)) #The number of complete individuals retained.
 
 
 ds$idF <- factor(ds$id)  # this is common pitfall of lme4

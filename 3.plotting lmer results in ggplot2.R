@@ -3,8 +3,7 @@ library(ggplot2)
 library(plyr)
 library(lme4)
 
-pathProject<-file.path(getwd())
-pathOutData <- file.path(pathProject,"Images/predicted.trajectories") # where to put images
+pathOutData <- file.path("./Images/predicted.trajectories") # where to put images
 rm(dsp)
 
 
@@ -21,6 +20,30 @@ dev<-deviance(model)
 AIC <- AIC(model) 
 BIC <- BIC(model) 
 
+# class(model) #lmerMod
+# lme4:::residuals.merMod(model) #Residual for each observervation
+lme4:::summary.merMod(model)
+lme4:::summary.merMod
+# 
+# dsG <- data.frame ( # Don't ask me what 'G' stands for
+#   Response = model@resp$y
+#   Residual = lme4:::residuals.merMod(model) #Residual for each observervation
+# )
+# 
+# model@resp
+
+model@devcomp #Fit stats
+
+names(model@pp)
+
+dsG <- model@frame # Don't ask me what 'G' stands for.  Name it something better
+dsG$Residual = lme4:::residuals.merMod(model) #Residual for each observervation
+head(dsG)
+
+sd(lme4:::residuals.merMod(model) )
+
+lme4:::ranef.merMod(model)
+ranef(model)$id[, "timec"] #The coefficient (of the specific 'timec' random effect), where each row is an individual (not an observation)
 # summary(model)
 # fixef(model)
 # ranef(model)

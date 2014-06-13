@@ -1,8 +1,8 @@
 # rm(list=ls(all=TRUE))
-# library(ggplot2)
-# library(plyr)
+library(ggplot2)
+library(plyr)
 library(lme4)
-?lmer
+
 pathProject<-file.path(getwd())
 pathOutData <- file.path(pathProject,"Images/predicted.trajectories") # where to put images
 rm(dsp)
@@ -32,23 +32,23 @@ BIC <- BIC(model)
 # str(m9@beta)
 
 
-dsPredict <- data.frame(
-  model@flist,  #The grouping factors for the random effects
-  timec=model@X[, 3], #The values of the time points(which varies, depending how the model equation is specified). 
-                      #model            m0,m1,m2,m3,m4,m5,m6,m7,m8,m9,10,m11,m12,
-                      #model@X value     1  2  2  2  2  2  2  2  2  3  2   2   2
-  YHat=model@eta #Predicted response, given the fixed and random effectss .
-)
+# dsPredict <- data.frame(
+#   model@flist,  #The grouping factors for the random effects
+#   timec=model@X[, 3], #The values of the time points(which varies, depending how the model equation is specified). 
+#                       #model            m0,m1,m2,m3,m4,m5,m6,m7,m8,m9,10,m11,m12,
+#                       #model@X value     1  2  2  2  2  2  2  2  2  3  2   2   2
+#   YHat=model@eta #Predicted response, given the fixed and random effectss .
+# )
 
 # #dsPredict above would error. Try this instead.
-# dsPredict<-data.frame(id=model@frame$id,
-#                       timec=model@frame$timec,
-#                       YHat=fitted(model))
-# #dsPredict$timec <-c(0:10)  # add this for m0 to plot no slopes
-# str(dsPredict$timec) # to check what variable was taken by model@X
-# dsp <- plyr::join(x=ds, y=dsPredict, by=c("id", "timec")) #Probably overkill
-# 
-# dsp$byearf<-as.factor(ds$byear)
+dsPredict<-data.frame(id=model@frame$id,
+                      timec=model@frame$timec,
+                      YHat=fitted(model))
+#dsPredict$timec <-c(0:10)  # add this for m0 to plot no slopes
+str(dsPredict$timec) # to check what variable was taken by model@X
+dsp <- plyr::join(x=ds, y=dsPredict, by=c("id", "timec")) #Probably overkill
+
+dsp$byearf<-as.factor(ds$byear)
 
 str(dsp)
 
@@ -82,9 +82,9 @@ g<-g7 +theme(legend.text = element_text(size = 15),legend.title.align =(-3.3))
 finalplot<-g + geom_smooth(aes(x=timec, y=YPar,group=byearf,colour=byear),fill=NA, linetype=1,size=1.5,alpha=1)
 #finalplot<-g  + geom_smooth(aes(x=timec, y=YPar,group=1),fill=NA, linetype=1,size=1.5,alpha=1) # code for m0
 
-pathFileOut<-file.path(pathOutData,modnum)
-png(filename = pathFileOut,
-    width =912, height =960 , units = "px")  # the resolution should be decided based on where to use the graphs
-plot(finalplot)
-dev.off()
+# pathFileOut<-file.path(pathOutData,modnum)
+# png(filename = pathFileOut,
+#     width =912, height =960 , units = "px")  # the resolution should be decided based on where to use the graphs
+# plot(finalplot)
+# dev.off()
 

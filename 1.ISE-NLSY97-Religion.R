@@ -38,10 +38,10 @@ ds$idF <- factor(ds$id)  # this is common pitfall of lme4
             + (1 + timec + timec2 + timec3 | id),
             data = ds, REML=0))
 
-(m10 <-lmer (attend ~ 
-               1  + agec + timec + timec2 + timec3
-             + agec:timec +agec:timec2 + agec:timec3
-             + (1 + timec + timec2 + timec3 | id),
-             data = ds, REML=0))
+# (m10 <-lmer (attend ~ 
+#                1  + agec + timec + timec2 + timec3
+#              + agec:timec +agec:timec2 + agec:timec3
+#              + (1 + timec + timec2 + timec3 | id),
+#              data = ds, REML=0))
  
 

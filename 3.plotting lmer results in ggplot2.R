@@ -51,7 +51,7 @@ ranef(model)$id[, "timec"] #The coefficient (of the specific 'timec' random effe
 # print(co)
 
 # str(m9@call)
-# str(m9@theta)
+# str(m9@theta)()
 # str(m9@beta)
 
 

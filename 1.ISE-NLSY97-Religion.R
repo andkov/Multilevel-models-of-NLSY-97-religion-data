@@ -14,7 +14,7 @@ pathInLong <- file.path (pathDataDir,"attend_long_nomiss_modeling.csv")     # re
 dsattendlong<- read.csv(pathInLong, stringsAsFactors=FALSE)
 str(dsattendlong)
 ds<-dsattendlong
-ds$agec<-ds$age2000c                                                        #renaming for simpler usage
+ds$agec<-ds$byearc                                                        #renaming for simpler usage
 
 # The names of the models correspond to the buttons in ISE_NLSY97_Religion.pptx
 # Explicitely requesting the model estimates:
@@ -25,19 +25,23 @@ ds$agec<-ds$age2000c                                                        #ren
  
 
 # ds<-subset(ds,(ds$byear==1980 |ds$byear==1982 |ds$byear== 1984),) # keeps size manageble, select chosen cohorts
-
-ds<-subset(ds,(ds$id<=200),) # keeps size manageble
+head(ds,20)
+ds<-subset(ds,(ds$id<=1000),) # keeps size manageble
 # length(unique(ds$id)) #The number of complete individuals retained.
 
 
 ds$idF <- factor(ds$id)  # this is common pitfall of lme4
 # Incert a model from "the list of models.R" file here:
 
+ggplot(ds, aes(x=timec, y=attend, group=idF))+ geom_line()+facet_wrap(~agec)
+
+
+
+
 (m9 <-lmer (attend ~ 
-              1  + timec + timec2 + timec3 + agec 
-            + agec:timec +agec:timec2 
-            + (1 + timec + timec2 + timec3 | id),
-            data = ds, REML=0))
+              1  + timec + timec2 # + timec3 
+            + (1 + timec + timec2 | idF),
+            data = ds, REML=FALSE))
 
 # (m10 <-lmer (attend ~ 
 #                1  + agec + timec + timec2 + timec3
